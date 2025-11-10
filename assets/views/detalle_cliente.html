@@ -1,0 +1,104 @@
+<section id="view-detalle-cliente" class="view">
+  <link rel="stylesheet" href="assets/css/detalle_cliente.css">
+  <header class="detalle-header">
+    <button id="btnVolverClientes" type="button" class="btn-back">← Volver</button>
+
+    <h2 id="detTitulo">Cliente</h2>
+    <div class="detalle-actions">
+      <button id="btnEditarCliente" class="btn-primary">Editar</button>
+      <button id="btnEliminarCliente" class="btn-danger">Eliminar</button>
+    </div>
+  </header>
+
+  <article class="detalle-card">
+    <dl class="detalle-datos">
+      <div>
+        <dt>Nombre</dt>
+        <dd id="detNombre">—</dd>
+      </div>
+      <div>
+        <dt>Apellido</dt>
+        <dd id="detApellido">—</dd>
+      </div>
+      <div>
+        <dt>Número</dt>
+        <dd id="detNumero">—</dd>
+      </div>
+      <div>
+        <dt>Correo</dt>
+        <dd id="detCorreo">—</dd>
+      </div>
+    </dl>
+
+    <section class="detalle-vehiculos">
+      <h3>Vehículos</h3>
+      <ul id="detVehiculos" class="veh-list"></ul>
+    </section>
+  </article>
+
+  <!-- Modal Editar (mismo layout que "Agregar") -->
+  <dialog id="dlgEditarCliente" class="modal">
+    <form id="formEditarCliente" method="dialog">
+      <header class="modal-header">
+        <h3>Editar cliente</h3>
+        <button type="button" class="icon-close" id="btnCerrarEditar" aria-label="Cerrar">×</button>
+      </header>
+
+      <div class="modal-body">
+        <div class="grid-2">
+          <label>Nombre
+            <input name="nombre" id="edNombre" required />
+          </label>
+          <label>Apellido
+            <input name="apellido" id="edApellido" required />
+          </label>
+        </div>
+
+        <div class="grid-2">
+          <label>Número
+            <input name="numero" id="edNumero" inputmode="tel" />
+          </label>
+          <label>Correo
+            <input name="correo" id="edCorreo" type="email" />
+          </label>
+        </div>
+
+        <section class="vehiculos-box">
+          <div class="vehiculos-head">
+            <h4>Vehículos</h4>
+            <button type="button" id="btnAddVehiculoEd" class="btn-secondary">Añadir vehículo</button>
+          </div>
+
+          <div id="vehiculosListEd" class="vehiculos-list">
+            <!-- filas vehículo -->
+          </div>
+        </section>
+      </div>
+
+      <footer class="modal-footer">
+        <button type="button" class="btn-ghost" id="btnCancelarEditar">Cancelar</button>
+        <button type="submit" class="btn-primary">Guardar cambios</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <!-- Modal Confirmar Eliminación -->
+  <dialog id="dlgConfirmEliminar" class="modal">
+    <form id="formEliminar" method="dialog">
+      <header class="modal-header">
+        <h3>Eliminar cliente</h3>
+        <button type="button" class="icon-close" id="btnCerrarEliminar" aria-label="Cerrar">×</button>
+      </header>
+
+      <div class="modal-body">
+        <p>¿Seguro que deseas eliminar al cliente <strong id="confNombre">este cliente</strong>?</p>
+        <p>Esta acción no se puede deshacer.</p>
+      </div>
+
+      <footer class="modal-footer">
+        <button type="button" class="btn-ghost" id="btnCancelarEliminar">Cancelar</button>
+        <button type="submit" class="btn-danger">Sí, eliminar</button>
+      </footer>
+    </form>
+  </dialog>
+</section>

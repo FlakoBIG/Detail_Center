@@ -73,6 +73,12 @@ import {
     data.forEach(c => {
       const card = document.createElement("article");
       card.className = "cliente-card";
+      card.style.cursor = "pointer";
+
+      // Permite entrar al detalle del cliente al hacer click
+      card.addEventListener("click", () => {
+        if (c._id) location.hash = `#cliente/${c._id}`;
+      });
 
       const titulo = document.createElement("h3");
       titulo.className = "cliente-nombre";
@@ -90,16 +96,19 @@ import {
       vh.textContent = "Vehículos";
       const vlist = document.createElement("ul");
       vlist.className = "veh-list";
+
       (c.vehiculos || []).forEach(v => {
         const li = document.createElement("li");
         li.textContent = `${v.marca || "—"} / ${v.modelo || "—"}`;
         vlist.appendChild(li);
       });
+
       if (!c.vehiculos || !c.vehiculos.length) {
         const li = document.createElement("li");
         li.textContent = "Sin vehículos registrados";
         vlist.appendChild(li);
       }
+
       vehWrap.append(vh, vlist);
 
       card.append(titulo, meta, vehWrap);
@@ -112,6 +121,7 @@ import {
 
       frag.appendChild(card);
     });
+
 
     cont.appendChild(frag);
   }

@@ -396,3 +396,192 @@ input:focus-visible{
   80%{ opacity:1; }
   100%{ opacity:0; transform: translate(-50%, 8px); }
 }
+/* =========================================================
+   Tarjetas de Clientes — Estilo premium con animaciones
+   (pegar al final de clientes.css)
+   ========================================================= */
+
+:root{
+  --rojo:#e53935;
+  --azul:#1976d2;
+  --azul-600:#1565c0;
+  --verde:#22c55e;
+  --gris-600:#3a3a3a;
+  --gris-700:#2e2e2e;
+  --gris-800:#262626;
+  --gris-900:#1f1f1f;
+  --text:#eaeaea;
+  --muted:#bdbdbd;
+  --radius:16px;
+  --shadow-1: 0 10px 30px rgba(0,0,0,.35);
+  --shadow-2: 0 16px 40px rgba(0,0,0,.45);
+}
+
+/* Grid con respiración */
+.clientes-list{
+  display:grid;
+  gap: 18px;
+  grid-template-columns: 1fr;
+  animation: sFade .25s ease;
+}
+@media (min-width:720px){ .clientes-list{ grid-template-columns: 1fr 1fr; } }
+@media (min-width:1080px){ .clientes-list{ grid-template-columns: 1fr 1fr 1fr; } }
+
+/* ===== Tarjeta glam ===== */
+.cliente-card{
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius);
+  background:
+    radial-gradient(1200px 300px at -10% -10%, #ffffff10 0%, transparent 42%),
+    linear-gradient(180deg, var(--gris-800), var(--gris-700));
+  border: 1px solid var(--gris-600);
+  box-shadow: var(--shadow-1);
+  padding: 16px 16px 14px;
+  display:flex;
+  flex-direction:column;
+  gap: 10px;
+  transform: translateZ(0); /* acelera animaciones */
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease, background .25s ease;
+  animation: cardEnter .22s cubic-bezier(.2,.7,.2,1);
+  isolation: isolate; /* para pseudo-elementos */
+  cursor: pointer;
+}
+
+/* Borde-aurora sutil al hacer hover */
+.cliente-card::before{
+  content:"";
+  position:absolute; inset:-1px;
+  border-radius: inherit;
+  background: conic-gradient(
+    from 0deg,
+    color-mix(in oklab, var(--azul) 70%, transparent),
+    transparent 25%,
+    color-mix(in oklab, var(--rojo) 70%, transparent) 50%,
+    transparent 75%,
+    color-mix(in oklab, var(--azul) 70%, transparent)
+  );
+  filter: blur(14px) saturate(120%);
+  opacity: 0; pointer-events:none;
+  transition: opacity .25s ease;
+  z-index: -1;
+}
+
+/* Sheen (destello oblicuo) */
+.cliente-card::after{
+  content:"";
+  position:absolute;
+  top:-40%; left:-60%;
+  width:160%; height:60%;
+  transform: rotate(-18deg);
+  background: linear-gradient(90deg, transparent, #ffffff10, transparent);
+  opacity: 0;
+  transition: opacity .25s ease, transform .25s ease;
+  pointer-events:none;
+}
+
+.cliente-card:hover{
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-2);
+  border-color: color-mix(in oklab, var(--azul) 35%, var(--gris-600));
+}
+.cliente-card:hover::before{ opacity: .6; }
+.cliente-card:hover::after{
+  opacity: 1;
+  transform: rotate(-18deg) translateX(12%);
+}
+
+/* Presión */
+.cliente-card:active{
+  transform: translateY(-1px) scale(.998);
+}
+
+/* Título + meta */
+.cliente-nombre{
+  margin: 0 0 2px;
+  font-size: 1.12rem;
+  font-weight: 800;
+  letter-spacing: .2px;
+  text-shadow: 0 1px 0 #0008;
+}
+.cliente-meta{
+  margin:0;
+  color: var(--muted);
+  font-size: .95rem;
+}
+
+/* Lista de vehículos */
+.cliente-vehiculos{
+  margin-top: 6px;
+  padding-top: 8px;
+  border-top: 1px dashed color-mix(in oklab, var(--azul) 30%, var(--gris-600));
+}
+.cliente-vehiculos h4{
+  margin: 0 0 6px;
+  font-size: .95rem;
+  color: #e5e5e5;
+  letter-spacing: .2px;
+}
+.veh-list{
+  margin:0; padding-left: 18px;
+  display:grid; gap:4px;
+}
+.veh-list li{
+  color: var(--text);
+  opacity: .92;
+}
+
+/* Tarjeta recién agregada (desde JS: .just-added) */
+.cliente-card.just-added{
+  animation: cardPop .28s cubic-bezier(.2,.7,.2,1), cardGlow 1.2s ease-out;
+}
+@keyframes cardPop{
+  from{ opacity:0; transform: translateY(10px) scale(.98); }
+  to{ opacity:1; transform: none; }
+}
+@keyframes cardGlow{
+  0%{ box-shadow: 0 0 0 0 rgba(25,118,210,.0); }
+  25%{ box-shadow: 0 0 0 8px rgba(25,118,210,.18); }
+  100%{ box-shadow: 0 0 0 0 rgba(25,118,210,.0); }
+}
+
+/* Entrada suave por defecto */
+@keyframes cardEnter{
+  from{ opacity:.0; transform: translateY(6px); }
+  to{ opacity:1; transform: none; }
+}
+@keyframes sFade{
+  from{ opacity:.0; } to{ opacity:1; }
+}
+
+/* Mini toast (si no lo tenías ya) */
+.mini-toast{
+  position: fixed;
+  left: 50%; bottom: 22px;
+  transform: translateX(-50%);
+  background: linear-gradient(180deg, var(--gris-800), var(--gris-700));
+  border: 1px solid var(--gris-600);
+  color: var(--text);
+  padding: 10px 14px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.45);
+  z-index: 120;
+  animation: toastIn 1.8s ease;
+}
+@keyframes toastIn{
+  0%{ opacity:0; transform: translate(-50%, 8px); }
+  12%{ opacity:1; transform: translate(-50%, 0); }
+  80%{ opacity:1; }
+  100%{ opacity:0; transform: translate(-50%, 8px); }
+}
+
+/* ===== Accesibilidad: respeta reduced motion ===== */
+@media (prefers-reduced-motion: reduce){
+  .cliente-card,
+  .cliente-card::before,
+  .cliente-card::after,
+  .mini-toast{
+    animation: none !important;
+    transition: none !important;
+  }
+}
