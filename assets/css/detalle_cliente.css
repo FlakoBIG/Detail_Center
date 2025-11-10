@@ -161,3 +161,98 @@ dialog.modal{
   z-index:120;
   animation:toastIn 1.8s ease;
 }
+/* ======================================================
+   Botones uniformes (Editar / Eliminar / Otros)
+   ====================================================== */
+
+/* Contenedor de los botones en el header del detalle */
+.detalle-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+/* Base común para todos */
+.btn-primary,
+.btn-danger,
+.btn-secondary,
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 120px;              /* 🔹 mismos anchos mínimos */
+  height: 42px;                  /* 🔹 misma altura */
+  padding: 0 18px;               /* 🔹 igual relleno horizontal */
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.3px;
+  border: none;
+  cursor: pointer;
+  transition:
+    background .18s ease,
+    transform .08s ease,
+    filter .12s ease,
+    box-shadow .12s ease;
+  box-shadow: 0 4px 16px rgba(0,0,0,.35), inset 0 0 0 2px #0003;
+  user-select: none;
+}
+
+/* ===== Estilos individuales ===== */
+.btn-primary {
+  background: linear-gradient(180deg, var(--azul), color-mix(in oklab, var(--azul) 80%, #0d47a1));
+  color: #fff;
+}
+.btn-danger {
+  background: linear-gradient(180deg, var(--rojo), color-mix(in oklab, var(--rojo) 80%, #8e1c1c));
+  color: #fff;
+}
+
+/* Hover / Active / Focus */
+.btn-primary:hover,
+.btn-danger:hover {
+  filter: brightness(1.08);
+  box-shadow: 0 6px 22px rgba(0,0,0,.45), inset 0 0 0 2px #0003;
+}
+.btn-primary:active,
+.btn-danger:active {
+  transform: translateY(1px) scale(.99);
+}
+
+/* Cuando los botones están uno al lado del otro */
+.detalle-actions .btn-primary:first-child {
+  margin-right: 6px;
+}
+
+/* Foco accesible */
+.btn-primary:focus-visible,
+.btn-danger:focus-visible {
+  outline: 2px solid color-mix(in oklab, var(--azul) 70%, white);
+  outline-offset: 2px;
+}
+
+/* Animación de brillo sutil al pasar */
+.btn-primary::after,
+.btn-danger::after {
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:inherit;
+  background:linear-gradient(120deg, transparent, #ffffff22, transparent);
+  opacity:0;
+  transition:opacity .25s ease;
+}
+.btn-primary:hover::after,
+.btn-danger:hover::after {
+  opacity:1;
+}
+
+/* Asegurar que ambos mantengan mismo ancho cuando cambia el texto */
+@media (max-width:480px){
+  .btn-primary,
+  .btn-danger {
+    min-width: 100px;
+    font-size: 0.9rem;
+  }
+}
