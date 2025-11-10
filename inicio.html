@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Autolavado — Inicio</title>
+  <link rel="stylesheet" href="assets/css/inicio.css" />
+</head>
+<body>
+  <!-- Toggle 100% CSS -->
+  <input id="navToggle" class="nav-toggle" type="checkbox" hidden />
+
+  <!-- Capa para cerrar al hacer click fuera -->
+  <label for="navToggle" id="overlay" class="overlay" aria-hidden="true"></label>
+
+  <!-- Barra superior -->
+  <header class="topbar">
+    <!-- Botón hamburguesa: es un label que activa el checkbox -->
+    <label for="navToggle" id="menuToggle" class="icon-btn" aria-label="Abrir menú">
+      <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
+        <path d="M3 6h18M3 12h18M3 18h18"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </label>
+
+    <a class="brand" href="#">
+      <span class="brand-dot" aria-hidden="true"></span>
+      Autolavado
+    </a>
+    <div class="topbar-spacer"></div>
+  </header>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="sidebar" aria-label="Menú lateral">
+    <nav class="nav">
+      <a class="nav-link active" href="#inicio">Inicio</a>
+      <a class="nav-link" href="#clientes">Clientes</a>
+      <a class="nav-link" href="#lavados">Lavados</a>
+      <a class="nav-link" href="#horario">Horario</a>
+    </nav>
+    <footer class="sidebar-footer">
+      <small>© 2025 Autolavado</small>
+    </footer>
+  </aside>
+
+  <!-- Contenido -->
+  <main id="main" class="content" tabindex="-1"></main>
+
+  <!-- JS auxiliar (opcional) -->
+  <script defer src="assets/js/inicio.js"></script>
+</body>
+</html>

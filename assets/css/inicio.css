@@ -1,0 +1,107 @@
+:root{
+  --rojo:#e53935;
+  --azul:#1976d2;
+  --gris-900:#1f1f1f;
+  --gris-800:#262626;
+  --gris-700:#2e2e2e;
+  --texto:#eaeaea;
+  --texto-muted:#bdbdbd;
+  --bordes:#3a3a3a;
+  --sidebar-w:264px;
+}
+
+*{ box-sizing:border-box; }
+html,body{ height:100%; }
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Arial;
+  background:#111; color:var(--texto);
+}
+a{ color:inherit; text-decoration:none; }
+
+/* Overlay (click para cerrar) */
+.overlay{
+  position:fixed; inset:0;
+  background:rgba(0,0,0,.5);
+  backdrop-filter:blur(1px);
+  z-index:40;
+  opacity:0; pointer-events:none;
+  transition:opacity .2s ease;
+}
+
+/* Topbar */
+.topbar{
+  position:sticky; top:0; z-index:50;
+  height:56px; display:flex; align-items:center; gap:12px;
+  padding:0 12px;
+  background:linear-gradient(90deg, var(--gris-900), var(--gris-800));
+  border-bottom:1px solid var(--bordes);
+}
+.icon-btn{
+  display:inline-grid; place-items:center;
+  width:40px; height:40px; border-radius:10px;
+  background:var(--gris-700);
+  color:#fff; border:1px solid var(--bordes); cursor:pointer;
+}
+.icon-btn:hover{ filter:brightness(1.1); }
+.icon-btn:active{ transform:translateY(1px); }
+.brand{ display:flex; align-items:center; gap:10px; font-weight:700; }
+.brand-dot{ width:14px; height:14px; border-radius:50%; background:var(--rojo); box-shadow:0 0 12px 0 var(--rojo); }
+.topbar-spacer{ margin-left:auto; }
+
+/* Sidebar (cerrada por defecto) */
+.sidebar{
+  position:fixed; top:56px; left:0; z-index:60;
+  width:var(--sidebar-w);
+  height:calc(100dvh - 56px);
+  background:linear-gradient(180deg, var(--gris-900), var(--gris-800));
+  border-right:1px solid var(--bordes);
+  transform:translateX(-100%);
+  transition:transform .2s ease;
+  display:flex; flex-direction:column;
+}
+.nav{ padding:12px; display:grid; gap:8px; }
+.nav-link{
+  display:flex; align-items:center; gap:10px;
+  padding:12px 14px; border-radius:12px;
+  background:var(--gris-700); color:var(--texto);
+  border:1px solid transparent;
+}
+.nav-link:hover{ filter:brightness(1.05); }
+.nav-link.active{
+  border-color:var(--azul);
+  outline:2px solid color-mix(in oklab, var(--azul) 50%, transparent);
+  box-shadow:0 0 0 2px #000 inset;
+}
+.sidebar-footer{
+  margin-top:auto; padding:12px 14px;
+  color:var(--texto-muted); border-top:1px solid var(--bordes);
+}
+
+.content{ min-height:calc(100dvh - 56px); padding:24px; }
+
+/* ====== LÓGICA CSS: toggle con checkbox ====== */
+.nav-toggle:checked ~ .overlay{
+  opacity:1; pointer-events:auto;
+}
+.nav-toggle:checked ~ .sidebar{
+  transform:translateX(0);
+}
+
+/* Escritorio: también abre/cierra con el mismo mecanismo */
+@media (min-width:1024px){
+  .overlay{ display:none !important; }
+  .content{ transition: margin-left .2s ease; }
+  .nav-toggle:checked ~ .content{
+    margin-left: var(--sidebar-w);
+  }
+}
+/* Foco accesible: sólo con teclado */
+.nav-link:focus { outline: none; }
+.nav-link:focus-visible {
+  outline: 2px solid var(--azul);
+  outline-offset: 2px;
+}
+
+/* (opcional) Si usas mouse, elimina el highlight azul nativo en algunos navegadores */
+.nav-link::-moz-focus-inner { border: 0; }
