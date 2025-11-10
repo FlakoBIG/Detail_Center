@@ -1,0 +1,75 @@
+<!-- ===== Vista Inicio / Calendario ===== -->
+<section id="view-inicio" class="view hidden" aria-labelledby="inicio-title">
+  <link rel="stylesheet" href="assets/css/inicio.css">  
+  <header class="inicio-header">
+    <h2 id="inicio-title">Agenda</h2>
+
+    <div class="cal-nav" aria-label="Navegación de mes">
+      <button id="calPrev" class="inicio-icon-btn" aria-label="Mes anterior">‹</button>
+      <div class="cal-current">
+        <span id="calMonth"></span>
+        <span id="calYear" class="muted"></span>
+      </div>
+      <button id="calNext" class="inicio-icon-btn" aria-label="Mes siguiente">›</button>
+    </div>
+  </header>
+
+  <div class="calendar" aria-label="Calendario mensual">
+    <div class="cal-grid cal-weekdays" aria-hidden="true">
+      <div>Lu</div><div>Ma</div><div>Mi</div><div>Ju</div><div>Vi</div><div>Sa</div><div>Do</div>
+    </div>
+    <div id="calGrid" class="cal-grid cal-days"><!-- celdas de días --></div>
+  </div>
+
+  <p id="inicioMsg" class="form-msg" aria-live="polite"></p>
+
+<!-- FAB -->
+<button id="fabAddEvento" class="fab" aria-label="Agregar evento" title="Agregar evento">+</button>
+
+<!-- Modal: Crear evento -->
+<dialog id="dlgEvento" class="modal">
+  <form id="formEvento" method="dialog">
+    <header class="modal-header">
+      <h3>Nuevo evento</h3>
+      <button type="submit" class="icon-close" id="btnCloseEvt" formmethod="dialog" value="close">×</button>
+    </header>
+
+    <div class="modal-body">
+      <p id="evtMsg" class="form-msg"></p>
+
+      <div class="grid-2">
+        <label>Cliente
+          <select id="selCliente" required>
+            <option value="" disabled selected>Seleccione un cliente…</option>
+          </select>
+        </label>
+
+        <label>Vehículo
+          <select id="selVehiculo" required disabled>
+            <option value="" disabled selected>Seleccione un vehículo…</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="grid-2">
+        <label>Fecha
+          <input id="inpFecha" type="date" required />
+        </label>
+
+        <label>Hora
+          <input id="inpHora" type="time" required />
+        </label>
+      </div>
+
+      <label>Nota
+        <textarea id="inpNota" rows="3" placeholder="Observaciones (opcional)"></textarea>
+      </label>
+    </div>
+
+    <footer class="modal-footer">
+      <button type="submit" class="btn-ghost" id="btnCancelEvt" formmethod="dialog" value="cancel">Cancelar</button>
+      <button type="submit" class="btn-primary" id="btnGuardarEvt">Guardar</button>
+    </footer>
+  </form>
+</dialog>
+

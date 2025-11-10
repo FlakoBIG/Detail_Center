@@ -1,8 +1,7 @@
-<!-- ===== Vista Clientes ===== -->
 <section id="view-clientes" class="view hidden" aria-labelledby="clientes-title">
+  <link rel="stylesheet" href="assets/css/clientes.css">
   <header class="clientes-header">
     <h2 id="clientes-title">Clientes</h2>
-
     <div class="clientes-search">
       <input id="cliSearch" type="search" placeholder="Buscar por nombre, correo, número o vehículo…" aria-label="Buscar clientes" />
     </div>
@@ -10,15 +9,13 @@
 
   <p id="cliMsg" class="form-msg"></p>
 
-  <div id="clientesList" class="clientes-list"><!-- tarjetas de clientes --></div>
+  <div id="clientesList" class="clientes-list"></div>
 
-  <!-- FAB: botón agregar -->
   <button id="fabAddCliente" class="fab" aria-label="Agregar cliente" title="Agregar cliente">+</button>
 </section>
 
-<!-- ===== Modal Agregar/Editar Cliente ===== -->
-<dialog id="dlgCliente" class="modal">
-  <form id="formCliente" method="dialog">
+<dialog id="dlgCliente" class="modal" aria-labelledby="dlgTitle">
+  <form id="formCliente" novalidate>
     <header class="modal-header">
       <h3 id="dlgTitle">Agregar cliente</h3>
       <button type="button" class="icon-close" id="btnCerrarDlg" aria-label="Cerrar">×</button>
@@ -27,19 +24,19 @@
     <div class="modal-body">
       <div class="grid-2">
         <label>Nombre
-          <input name="nombre" id="cliNombre" required />
+          <input name="nombre" id="cliNombre" type="text" required minlength="2" maxlength="40" autocomplete="given-name" inputmode="text" autocapitalize="words" pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñÜü'\\-\\s]{2,40}$" />
         </label>
         <label>Apellido
-          <input name="apellido" id="cliApellido" required />
+          <input name="apellido" id="cliApellido" type="text" required minlength="2" maxlength="40" autocomplete="family-name" inputmode="text" autocapitalize="words" pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñÜü'\\-\\s]{2,40}$" />
         </label>
       </div>
 
       <div class="grid-2">
         <label>Número
-          <input name="numero" id="cliNumero" inputmode="tel" />
+          <input name="numero" id="cliNumero" type="tel" inputmode="tel" autocomplete="tel-national" placeholder="+59 8 1234 5678" maxlength="20" />
         </label>
         <label>Correo
-          <input name="correo" id="cliCorreo" type="email" />
+          <input name="correo" id="cliCorreo" type="email" autocomplete="email" inputmode="email" placeholder="nombre@dominio.com" maxlength="120" />
         </label>
       </div>
 
@@ -48,16 +45,14 @@
           <h4>Vehículos</h4>
           <button type="button" id="btnAddVehiculo" class="btn-secondary">Añadir vehículo</button>
         </div>
-
-        <div id="vehiculosList" class="vehiculos-list">
-          <!-- filas de vehículo -->
-        </div>
+        <div id="vehiculosList" class="vehiculos-list"></div>
       </section>
     </div>
 
     <footer class="modal-footer">
       <button type="button" class="btn-ghost" id="btnCancelar">Cancelar</button>
-      <button type="submit" class="btn-primary">Guardar</button>
+      <button type="submit" class="btn-primary" id="btnGuardar">Guardar</button>
     </footer>
   </form>
+  
 </dialog>

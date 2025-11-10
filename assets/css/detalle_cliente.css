@@ -23,6 +23,7 @@
   padding:24px;
   color:var(--text);
   animation:fadeIn .25s ease-out;
+  cursor: default; /* Fix cursor base */
 }
 
 /* ===== Header ===== */
@@ -37,7 +38,22 @@
   border-radius:var(--radius);
   box-shadow:var(--shadow);
   border:1px solid var(--gris-600);
+  position: relative;
+  overflow: hidden;
 }
+.detalle-header::after{
+  content:"";
+  position:absolute;
+  top:0; left:-50%;
+  width:200%; height:100%;
+  background: linear-gradient(120deg, transparent, #ffffff0d, transparent);
+  transform: translateX(-50%) skewX(-15deg);
+  opacity: 0;
+  transition: opacity .3s ease;
+  pointer-events: none; /* Fix flicker */
+}
+.detalle-header:hover::after{ opacity: 1; }
+
 .detalle-header h2{
   font-size:1.5rem;
   font-weight:800;
@@ -62,21 +78,6 @@
 }
 .btn-back:hover{filter:brightness(1.08);box-shadow:0 10px 24px rgba(0,0,0,.45);}
 .btn-back:active{transform:translateY(1px) scale(.99);}
-
-/* Botones generales */
-.btn-primary,.btn-danger,.btn-ghost,.btn-secondary{
-  padding:8px 14px;
-  border-radius:10px;
-  font-weight:700;
-  cursor:pointer;
-  transition:all .2s ease;
-  border:none;
-}
-.btn-primary{background:linear-gradient(180deg,var(--azul),#0d47a1);color:#fff;}
-.btn-danger{background:linear-gradient(180deg,var(--rojo),#b32525);color:#fff;}
-.btn-secondary{background:#383838;color:var(--text);border:1px solid var(--gris-600);}
-.btn-ghost{background:transparent;color:var(--text);border:1px solid var(--gris-600);}
-.btn-primary:hover,.btn-danger:hover,.btn-secondary:hover,.btn-ghost:hover{filter:brightness(1.1);}
 
 /* ===== Tarjeta principal ===== */
 .detalle-card{
@@ -105,7 +106,87 @@
   color:var(--azul);
 }
 .veh-list{display:grid;gap:5px;padding-left:18px;}
+.veh-list li{ cursor: default; } /* No clicables */
 .veh-list li:hover{transform:translateX(4px);color:#fff;transition:transform .15s ease;}
+
+/* ===== Acciones (Editar / Eliminar) ===== */
+.detalle-actions{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  justify-content:flex-end;
+  flex-wrap: wrap;
+}
+
+/* Base uniforme (ligeramente más pequeñas que antes) */
+.btn-primary,
+.btn-danger,
+.btn-secondary,
+.btn-ghost{
+  position: relative; /* para ::after */
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width: 108px;          /* antes 120px */
+  height: 40px;              /* antes 42px */
+  padding: 0 16px;           /* antes 0 18px */
+  border-radius:12px;
+  font-weight:700;
+  font-size:.93rem;          /* antes .95rem */
+  letter-spacing:.3px;
+  border:none;
+  cursor:pointer;
+  transition:
+    background .18s ease,
+    transform .08s ease,
+    filter .12s ease,
+    box-shadow .12s ease;
+  box-shadow:0 4px 16px rgba(0,0,0,.35), inset 0 0 0 2px #0003;
+  user-select:none;
+}
+
+.btn-primary{background:linear-gradient(180deg,var(--azul),color-mix(in oklab,var(--azul) 80%,#0d47a1));color:#fff;}
+.btn-danger{background:linear-gradient(180deg,var(--rojo),color-mix(in oklab,var(--rojo) 80%,#8e1c1c));color:#fff;}
+.btn-secondary{background:#383838;color:var(--text);border:1px solid var(--gris-600);}
+.btn-ghost{background:transparent;color:var(--text);border:1px solid var(--gris-600);}
+
+.btn-primary:hover,
+.btn-danger:hover,
+.btn-secondary:hover,
+.btn-ghost:hover{
+  filter:brightness(1.08);
+  box-shadow:0 6px 22px rgba(0,0,0,.45), inset 0 0 0 2px #0003;
+}
+.btn-primary:active,
+.btn-danger:active,
+.btn-secondary:active,
+.btn-ghost:active{ transform: translateY(1px) scale(.99); }
+
+/* Brillo sutil en hover (no capta eventos) */
+.btn-primary::after,
+.btn-danger::after,
+.btn-secondary::after,
+.btn-ghost::after{
+  content:"";
+  position:absolute; inset:0;
+  border-radius:inherit;
+  background:linear-gradient(120deg, transparent, #ffffff22, transparent);
+  opacity:0; transition:opacity .25s ease;
+  pointer-events:none; /* Fix flicker */
+}
+.btn-primary:hover::after,
+.btn-danger:hover::after,
+.btn-secondary:hover::after,
+.btn-ghost:hover::after{ opacity:1; }
+
+/* Foco accesible */
+.btn-primary:focus-visible,
+.btn-danger:focus-visible,
+.btn-secondary:focus-visible,
+.btn-ghost:focus-visible{
+  outline:2px solid color-mix(in oklab,var(--azul) 70%, white);
+  outline-offset:2px;
+}
 
 /* ===== Modal ===== */
 dialog.modal{
@@ -115,8 +196,14 @@ dialog.modal{
   color:var(--text);
   box-shadow:0 0 0 2px #0003,0 24px 60px rgba(0,0,0,.6);
   animation:modalIn .25s ease-out;
-  width:min(720px,92vw) !important;
+  width:min(720px,92vw) !important;  /* igual que Agregar */
   max-width:720px;
+  max-height: min(84vh, 780px);
+  overflow: auto;
+}
+dialog::backdrop{
+  background: rgba(0,0,0,.5);
+  backdrop-filter: blur(2px);
 }
 
 .modal-header,.modal-footer{
@@ -130,7 +217,23 @@ dialog.modal{
 .grid-2{display:grid;gap:12px;}
 @media(min-width:640px){.grid-2{grid-template-columns:1fr 1fr;}}
 
-.veh-row{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:center;animation:rowEnter .25s ease;}
+.vehiculos-box{
+  border-top: 1px dashed color-mix(in oklab,var(--azul) 25%,var(--gris-600));
+  padding-top: 8px;
+}
+.vehiculos-head{
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:10px;
+}
+.vehiculos-list{ display:grid; gap:8px; }
+
+.veh-row{
+  display:grid;
+  grid-template-columns:1fr 1fr auto;
+  gap:8px;
+  align-items:center;
+  animation:rowEnter .25s ease;
+}
 .veh-input{
   background:var(--gris-800);
   border:1px solid var(--gris-600);
@@ -138,7 +241,11 @@ dialog.modal{
   padding:6px 10px;
   color:var(--text);
 }
-.btn-icon{background:none;border:none;color:var(--muted);font-size:1.1rem;cursor:pointer;transition:color .2s ease,transform .1s ease;}
+.btn-icon{
+  background:none;border:none;color:var(--muted);
+  font-size:1.1rem;cursor:pointer;
+  transition:color .2s ease,transform .1s ease;
+}
 .btn-icon:hover{color:var(--rojo);transform:scale(1.1);}
 
 /* ===== Animaciones ===== */
@@ -161,98 +268,41 @@ dialog.modal{
   z-index:120;
   animation:toastIn 1.8s ease;
 }
+
 /* ======================================================
-   Botones uniformes (Editar / Eliminar / Otros)
+   Responsive — móvil
    ====================================================== */
+@media (max-width: 640px){
+  #view-detalle-cliente{ padding:16px; gap:16px; }
 
-/* Contenedor de los botones en el header del detalle */
-.detalle-actions {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  justify-content: flex-end;
-}
+  .detalle-header{
+    padding:12px 14px;
+    gap:10px;
+  }
+  .detalle-header h2{
+    font-size:1.25rem;
+  }
 
-/* Base común para todos */
-.btn-primary,
-.btn-danger,
-.btn-secondary,
-.btn-ghost {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 120px;              /* 🔹 mismos anchos mínimos */
-  height: 42px;                  /* 🔹 misma altura */
-  padding: 0 18px;               /* 🔹 igual relleno horizontal */
-  border-radius: 12px;
-  font-weight: 700;
-  font-size: 0.95rem;
-  letter-spacing: 0.3px;
-  border: none;
-  cursor: pointer;
-  transition:
-    background .18s ease,
-    transform .08s ease,
-    filter .12s ease,
-    box-shadow .12s ease;
-  box-shadow: 0 4px 16px rgba(0,0,0,.35), inset 0 0 0 2px #0003;
-  user-select: none;
-}
+  .detalle-actions{
+    width:100%;
+    justify-content:stretch;
+    gap:8px;
+  }
+  .detalle-actions .btn-primary,
+  .detalle-actions .btn-danger{
+    flex:1 1 auto;         /* que ocupen el ancho disponible */
+    min-width: 104px;
+    height: 38px;          /* un toque más compactos en cel */
+    font-size: .9rem;
+    padding: 0 14px;
+  }
 
-/* ===== Estilos individuales ===== */
-.btn-primary {
-  background: linear-gradient(180deg, var(--azul), color-mix(in oklab, var(--azul) 80%, #0d47a1));
-  color: #fff;
-}
-.btn-danger {
-  background: linear-gradient(180deg, var(--rojo), color-mix(in oklab, var(--rojo) 80%, #8e1c1c));
-  color: #fff;
-}
+  .detalle-card{
+    padding:18px 14px;
+  }
 
-/* Hover / Active / Focus */
-.btn-primary:hover,
-.btn-danger:hover {
-  filter: brightness(1.08);
-  box-shadow: 0 6px 22px rgba(0,0,0,.45), inset 0 0 0 2px #0003;
-}
-.btn-primary:active,
-.btn-danger:active {
-  transform: translateY(1px) scale(.99);
-}
-
-/* Cuando los botones están uno al lado del otro */
-.detalle-actions .btn-primary:first-child {
-  margin-right: 6px;
-}
-
-/* Foco accesible */
-.btn-primary:focus-visible,
-.btn-danger:focus-visible {
-  outline: 2px solid color-mix(in oklab, var(--azul) 70%, white);
-  outline-offset: 2px;
-}
-
-/* Animación de brillo sutil al pasar */
-.btn-primary::after,
-.btn-danger::after {
-  content:"";
-  position:absolute;
-  inset:0;
-  border-radius:inherit;
-  background:linear-gradient(120deg, transparent, #ffffff22, transparent);
-  opacity:0;
-  transition:opacity .25s ease;
-}
-.btn-primary:hover::after,
-.btn-danger:hover::after {
-  opacity:1;
-}
-
-/* Asegurar que ambos mantengan mismo ancho cuando cambia el texto */
-@media (max-width:480px){
-  .btn-primary,
-  .btn-danger {
-    min-width: 100px;
-    font-size: 0.9rem;
+  .veh-row{
+    grid-template-columns: 1fr; /* inputs uno bajo otro en cel */
+    gap: 10px;
   }
 }

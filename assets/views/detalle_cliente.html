@@ -2,7 +2,6 @@
   <link rel="stylesheet" href="assets/css/detalle_cliente.css">
   <header class="detalle-header">
     <button id="btnVolverClientes" type="button" class="btn-back">← Volver</button>
-
     <h2 id="detTitulo">Cliente</h2>
     <div class="detalle-actions">
       <button id="btnEditarCliente" class="btn-primary">Editar</button>
@@ -36,30 +35,29 @@
     </section>
   </article>
 
-  <!-- Modal Editar (mismo layout que "Agregar") -->
-  <dialog id="dlgEditarCliente" class="modal">
-    <form id="formEditarCliente" method="dialog">
+  <dialog id="dlgEditarCliente" class="modal" aria-labelledby="dlgTitleEd">
+    <form id="formEditarCliente" method="dialog" novalidate>
       <header class="modal-header">
-        <h3>Editar cliente</h3>
+        <h3 id="dlgTitleEd">Editar cliente</h3>
         <button type="button" class="icon-close" id="btnCerrarEditar" aria-label="Cerrar">×</button>
       </header>
 
       <div class="modal-body">
         <div class="grid-2">
           <label>Nombre
-            <input name="nombre" id="edNombre" required />
+            <input name="nombre" id="edNombre" type="text" required minlength="2" maxlength="40" autocomplete="given-name" inputmode="text" autocapitalize="words" pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñÜü'\-\s]{2,40}$" />
           </label>
           <label>Apellido
-            <input name="apellido" id="edApellido" required />
+            <input name="apellido" id="edApellido" type="text" required minlength="2" maxlength="40" autocomplete="family-name" inputmode="text" autocapitalize="words" pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñÜü'\-\s]{2,40}$" />
           </label>
         </div>
 
         <div class="grid-2">
           <label>Número
-            <input name="numero" id="edNumero" inputmode="tel" />
+            <input name="numero" id="edNumero" type="tel" inputmode="tel" autocomplete="tel-national" placeholder="+598 91234567" maxlength="20" />
           </label>
           <label>Correo
-            <input name="correo" id="edCorreo" type="email" />
+            <input name="correo" id="edCorreo" type="email" autocomplete="email" inputmode="email" placeholder="nombre@dominio.com" maxlength="120" />
           </label>
         </div>
 
@@ -68,10 +66,7 @@
             <h4>Vehículos</h4>
             <button type="button" id="btnAddVehiculoEd" class="btn-secondary">Añadir vehículo</button>
           </div>
-
-          <div id="vehiculosListEd" class="vehiculos-list">
-            <!-- filas vehículo -->
-          </div>
+          <div id="vehiculosListEd" class="vehiculos-list"></div>
         </section>
       </div>
 
@@ -82,7 +77,6 @@
     </form>
   </dialog>
 
-  <!-- Modal Confirmar Eliminación -->
   <dialog id="dlgConfirmEliminar" class="modal">
     <form id="formEliminar" method="dialog">
       <header class="modal-header">
