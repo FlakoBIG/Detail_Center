@@ -1,0 +1,63 @@
+<!-- ===== Vista Clientes ===== -->
+<section id="view-clientes" class="view hidden" aria-labelledby="clientes-title">
+  <header class="clientes-header">
+    <h2 id="clientes-title">Clientes</h2>
+
+    <div class="clientes-search">
+      <input id="cliSearch" type="search" placeholder="Buscar por nombre, correo, número o vehículo…" aria-label="Buscar clientes" />
+    </div>
+  </header>
+
+  <p id="cliMsg" class="form-msg"></p>
+
+  <div id="clientesList" class="clientes-list"><!-- tarjetas de clientes --></div>
+
+  <!-- FAB: botón agregar -->
+  <button id="fabAddCliente" class="fab" aria-label="Agregar cliente" title="Agregar cliente">+</button>
+</section>
+
+<!-- ===== Modal Agregar/Editar Cliente ===== -->
+<dialog id="dlgCliente" class="modal">
+  <form id="formCliente" method="dialog">
+    <header class="modal-header">
+      <h3 id="dlgTitle">Agregar cliente</h3>
+      <button type="button" class="icon-close" id="btnCerrarDlg" aria-label="Cerrar">×</button>
+    </header>
+
+    <div class="modal-body">
+      <div class="grid-2">
+        <label>Nombre
+          <input name="nombre" id="cliNombre" required />
+        </label>
+        <label>Apellido
+          <input name="apellido" id="cliApellido" required />
+        </label>
+      </div>
+
+      <div class="grid-2">
+        <label>Número
+          <input name="numero" id="cliNumero" inputmode="tel" />
+        </label>
+        <label>Correo
+          <input name="correo" id="cliCorreo" type="email" />
+        </label>
+      </div>
+
+      <section class="vehiculos-box">
+        <div class="vehiculos-head">
+          <h4>Vehículos</h4>
+          <button type="button" id="btnAddVehiculo" class="btn-secondary">Añadir vehículo</button>
+        </div>
+
+        <div id="vehiculosList" class="vehiculos-list">
+          <!-- filas de vehículo -->
+        </div>
+      </section>
+    </div>
+
+    <footer class="modal-footer">
+      <button type="button" class="btn-ghost" id="btnCancelar">Cancelar</button>
+      <button type="submit" class="btn-primary">Guardar</button>
+    </footer>
+  </form>
+</dialog>

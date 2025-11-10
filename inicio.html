@@ -3,8 +3,9 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Autolavado — Inicio</title>
+  <title>Autolavado</title>
   <link rel="stylesheet" href="assets/css/inicio.css" />
+  <link rel="stylesheet" href="assets/css/clientes.css">
 </head>
 <body>
   <!-- Toggle 100% CSS -->
@@ -15,7 +16,7 @@
 
   <!-- Barra superior -->
   <header class="topbar">
-    <!-- Botón hamburguesa: es un label que activa el checkbox -->
+    <!-- Botón hamburguesa -->
     <label for="navToggle" id="menuToggle" class="icon-btn" aria-label="Abrir menú">
       <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
         <path d="M3 6h18M3 12h18M3 18h18"
@@ -38,15 +39,35 @@
       <a class="nav-link" href="#lavados">Lavados</a>
       <a class="nav-link" href="#horario">Horario</a>
     </nav>
+
+    <!-- ===== Control de estado al fondo del menú ===== -->
     <footer class="sidebar-footer">
-      <small>© 2025 Autolavado</small>
+      <div class="estado-row">
+        <div class="estado-chip">
+          <span class="estado-led" aria-hidden="true"></span>
+          <span id="estadoTexto">Cargando estado…</span>
+        </div>
+
+        <button id="btnToggleEstado"
+                class="estado-btn-side"
+                type="button"
+                aria-pressed="false">
+          ⏱️ Cargando…
+        </button>
+      </div>
+
+      <small class="copy">© 2025 Autolavado</small>
     </footer>
   </aside>
 
   <!-- Contenido -->
   <main id="main" class="content" tabindex="-1"></main>
 
-  <!-- JS auxiliar (opcional) -->
+  <!-- JS -->
   <script defer src="assets/js/inicio.js"></script>
+  <script defer src="assets/js/router.js"></script>
+  <script type="module" defer src="assets/js/clientes.js"></script>
+  <!-- Control de estado (LED + botón) con Firestore -->
+  <script type="module" defer src="assets/js/empresa.js"></script>
 </body>
 </html>
