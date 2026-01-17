@@ -1,4 +1,4 @@
-/* ======================================================
+/* ====================================================== 
    DETALLE CLIENTE — Estilo moderno, limpio y animado
    ====================================================== */
 :root{
@@ -195,15 +195,24 @@ dialog.modal{
   background:linear-gradient(180deg,var(--gris-800),var(--gris-700));
   color:var(--text);
   box-shadow:0 0 0 2px #0003,0 24px 60px rgba(0,0,0,.6);
-  animation:modalIn .25s ease-out;
+
+  /* 🔧 Cambio único para quitar parpadeo: NO animar por defecto */
+  animation: none;
+
   width:min(720px,92vw) !important;  /* igual que Agregar */
   max-width:720px;
   max-height: min(84vh, 780px);
   overflow: auto;
+
+  /* estabilidad de renderizado */
+  will-change: opacity, transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 dialog::backdrop{
   background: rgba(0,0,0,.5);
   backdrop-filter: blur(2px);
+  transition: none;
 }
 
 .modal-header,.modal-footer{
@@ -217,15 +226,10 @@ dialog::backdrop{
 .grid-2{display:grid;gap:12px;}
 @media(min-width:640px){.grid-2{grid-template-columns:1fr 1fr;}}
 
-.vehiculos-box{
-  border-top: 1px dashed color-mix(in oklab,var(--azul) 25%,var(--gris-600));
-  padding-top: 8px;
-}
 .vehiculos-head{
   display:flex; align-items:center; justify-content:space-between;
   margin-bottom:10px;
 }
-.vehiculos-list{ display:grid; gap:8px; }
 
 .veh-row{
   display:grid;
@@ -254,6 +258,14 @@ dialog::backdrop{
 @keyframes modalIn{from{opacity:0;transform:scale(.95) translateY(8px);}to{opacity:1;transform:none;}}
 @keyframes rowEnter{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:none;}}
 @keyframes toastIn{0%{opacity:0;transform:translate(-50%,8px);}12%{opacity:1;transform:translate(-50%,0);}80%{opacity:1;}100%{opacity:0;transform:translate(-50%,8px);}}
+
+/* Activadores de animación controlados por JS (mantén tu lógica JS) */
+.modal.opening{ animation: modalIn .18s cubic-bezier(.2,.7,.2,1); }
+.modal.closing{ animation: modalOut .16s cubic-bezier(.2,.7,.2,1) forwards; }
+@keyframes modalOut{
+  from{ opacity:1; transform: translateY(0) scale(1); }
+  to{ opacity:0; transform: translateY(8px) scale(.985); }
+}
 
 /* Mini toast */
 .mini-toast{
@@ -306,3 +318,529 @@ dialog::backdrop{
     gap: 10px;
   }
 }
+
+/* ======= (Bloque extra que venía en tu CSS: variables y estilos de Clientes) ======= */
+:root{
+  --rojo:#e53935;
+  --azul:#1976d2;
+  --azul-600:#1565c0;
+  --gris-100:#f3f3f3;
+  --gris-300:#d0d0d0;
+  --gris-600:#3a3a3a;
+  --gris-700:#2e2e2e;
+  --gris-800:#262626;
+  --gris-900:#1f1f1f;
+  --bg:#111;
+  --text:#eaeaea;
+  --muted:#bdbdbd;
+  --radius:14px;
+  --radius-sm:10px;
+  --shadow:0 10px 30px rgba(0,0,0,.35);
+}
+
+/* Utilidades */
+.hidden{ display:none !important; }
+.form-msg{
+  margin: 8px 0 16px;
+  color: var(--muted);
+  font-size: .95rem;
+}
+
+/* Vista: header y búsqueda */
+#view-clientes{
+  display:block;
+  animation: fadeIn .18s ease;
+}
+.clientes-header{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+#clientes-title, .clientes-header h2{
+  margin:0;
+  font-size: 1.35rem;
+  font-weight: 700;
+}
+.clientes-search{
+  margin-left: auto;
+  min-width: 240px;
+  flex: 1 1 280px;
+  display:flex;
+}
+#cliSearch{
+  width:100%;
+  height:44px;
+  padding: 0 14px;
+  border-radius: var(--radius);
+  border:1px solid var(--gris-600);
+  background: linear-gradient(180deg, var(--gris-900), var(--gris-800));
+  color: var(--text);
+  outline: none;
+  transition: box-shadow .15s ease, border-color .15s ease;
+}
+#cliSearch::placeholder{ color:#a8a8a8; }
+#cliSearch:focus{
+  border-color: var(--azul);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--azul) 40%, transparent);
+}
+
+/* Grid de clientes */
+.clientes-list{
+  display:grid;
+  gap: 18px;
+  grid-template-columns: 1fr;
+  animation: sFade .25s ease;
+}
+@media (min-width:720px){ .clientes-list{ grid-template-columns: 1fr 1fr; } }
+@media (min-width:1080px){ .clientes-list{ grid-template-columns: 1fr 1fr 1fr; } }
+
+/* Tarjeta cliente (glam) */
+.cliente-card{
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius);
+  background:
+    radial-gradient(1200px 300px at -10% -10%, #ffffff10 0%, transparent 42%),
+    linear-gradient(180deg, var(--gris-800), var(--gris-700));
+  border: 1px solid var(--gris-600);
+  box-shadow: var(--shadow);
+  padding: 16px 16px 14px;
+  display:flex;
+  flex-direction:column;
+  gap: 10px;
+  transform: translateZ(0);
+  /* Transiciones más suaves */
+  transition:
+    transform .42s cubic-bezier(.22,.61,.36,1),
+    box-shadow .42s cubic-bezier(.22,.61,.36,1),
+    border-color .42s ease,
+    background .42s ease;
+  animation: cardEnter .22s cubic-bezier(.2,.7,.2,1);
+  isolation: isolate;
+  cursor: pointer;
+  z-index: 0; /* stacking context propio */
+}
+/* Mantener contenido por encima del aura */
+.cliente-card > *{
+  position: relative;
+  z-index: 1;
+}
+
+/* AURA azul/roja (visible y suave) */
+.cliente-card::before{
+  content:"";
+  position:absolute; inset:-1px;
+  border-radius: inherit;
+  background: conic-gradient(
+    from 0deg,
+    color-mix(in oklab, var(--azul) 70%, transparent),
+    transparent 25%,
+    color-mix(in oklab, var(--rojo) 70%, transparent) 50%,
+    transparent 75%,
+    color-mix(in oklab, var(--azul) 70%, transparent)
+  );
+  filter: blur(14px) saturate(120%);
+  opacity: .06;                 /* empieza muy sutil */
+  pointer-events:none;
+  z-index: 0;                   /* ya NO -1 */
+  transition:
+    opacity .55s cubic-bezier(.22,.61,.36,1),
+    filter .55s ease;
+}
+
+/* Destello oblicuo */
+.cliente-card::after{
+  content:"";
+  position:absolute;
+  top:-40%; left:-60%;
+  width:160%; height:60%;
+  transform: rotate(-18deg);
+  background: linear-gradient(90deg, transparent, #ffffff10, transparent);
+  opacity: 0;
+  pointer-events:none;
+  z-index: 0;
+  transition:
+    opacity .55s cubic-bezier(.22,.61,.36,1),
+    transform .55s cubic-bezier(.22,.61,.36,1);
+}
+
+/* Hover suave: elevación + aparición gradual */
+.cliente-card:hover{
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(0,0,0,.45);
+  border-color: color-mix(in oklab, var(--azul) 35%, var(--gris-600));
+}
+.cliente-card:hover::before{ opacity: .6; } /* brillo conic más visible */
+.cliente-card:hover::after{  opacity: 1; transform: rotate(-18deg) translateX(12%); }
+.cliente-card:active{ transform: translateY(-1px) scale(.998); }
+
+/* Contenido tarjeta */
+.cliente-nombre{
+  margin: 0 0 2px;
+  font-size: 1.12rem;
+  font-weight: 800;
+  letter-spacing: .2px;
+  text-shadow: 0 1px 0 #0008;
+}
+.cliente-meta{
+  margin:0;
+  color: var(--muted);
+  font-size: .95rem;
+}
+.cliente-vehiculos{
+  margin-top: 6px;
+  padding-top: 8px;
+  border-top: 1px dashed color-mix(in oklab, var(--azul) 30%, var(--gris-600));
+}
+.cliente-vehiculos h4{
+  margin: 0 0 6px;
+  font-size: .95rem;
+  color: #e5e5e5;
+  letter-spacing: .2px;
+}
+.veh-list{
+  margin:0; padding-left: 18px;
+  display:grid; gap:4px;
+}
+.veh-list li{ color: var(--text); opacity: .92; }
+
+/* FAB */
+.fab{
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  border: 1px solid var(--gris-600);
+  background: radial-gradient(circle at 30% 30%, #ffffff22, transparent 60%), var(--azul);
+  color: #fff;
+  font-size: 28px;
+  line-height: 1;
+  display: grid; place-items: center;
+  cursor: pointer;
+  box-shadow: 0 12px 30px rgba(0,0,0,.45), inset 0 0 0 2px #0003;
+  transition: transform .12s ease, filter .12s ease, box-shadow .12s ease;
+  z-index: 70;
+}
+.fab:hover{ filter: brightness(1.05); }
+.fab:active{ transform: translateY(1px) scale(.98); }
+
+/* Modal (dialog) */
+.modal{
+  width: min(720px, 92vw);
+  border: 1px solid var(--gris-600);
+  border-radius: calc(var(--radius) + 2px);
+  padding: 0;
+  color: var(--text);
+  background: linear-gradient(180deg, var(--gris-900), var(--gris-800));
+  box-shadow: 0 22px 60px rgba(0,0,0,.6);
+}
+.modal::backdrop{
+  background: rgba(0,0,0,.55);
+  backdrop-filter: blur(2px);
+}
+.modal-header{
+  display:flex; align-items:center;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--gris-600);
+  background: linear-gradient(180deg, var(--gris-800), var(--gris-700));
+  border-top-left-radius: inherit;
+  border-top-right-radius: inherit;
+}
+.modal-header h3{ margin:0; font-size:1.1rem; }
+.icon-close{
+  margin-left: auto;
+  width: 36px; height: 36px;
+  display:grid; place-items:center;
+  border-radius: var(--radius-sm);
+  background: var(--gris-700);
+  color:#fff;
+  border: 1px solid var(--gris-600);
+  cursor:pointer;
+}
+.icon-close:hover{ filter: brightness(1.08); }
+.modal-body{
+  padding: 14px;
+  display: grid; gap: 14px;
+}
+.grid-2{
+  display:grid; gap:12px;
+  grid-template-columns: 1fr;
+}
+@media (min-width:640px){
+  .grid-2{ grid-template-columns: 1fr 1fr; }
+}
+
+/* Form */
+label{
+  display:grid; gap:6px;
+  font-size:.95rem;
+}
+input[type="text"],
+input[type="email"],
+input[type="search"],
+input[inputmode="tel"],
+input:not([type]){
+  height:42px;
+  padding: 0 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--gris-600);
+  background: linear-gradient(180deg, var(--gris-900), var(--gris-800));
+  color: var(--text);
+  outline: none;
+  transition: box-shadow .12s ease, border-color .12s ease;
+}
+input::placeholder{ color:#a6a6a6; }
+input:focus{
+  border-color: var(--azul);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--azul) 40%, transparent);
+}
+
+/* Vehículos dinámicos */
+.vehiculos-box{
+  border: 1px solid var(--gris-600);
+  border-radius: var(--radius);
+  padding: 10px;
+  background: linear-gradient(180deg, var(--gris-800), var(--gris-700));
+}
+.vehiculos-head{
+  display:flex; align-items:center; gap:10px;
+  margin-bottom: 8px;
+}
+.vehiculos-head h4{ margin:0; font-size:1rem; }
+.vehiculos-list{ display:grid; gap:8px; }
+.veh-row{
+  display:grid; gap:8px;
+  grid-template-columns: 1fr 1fr auto;
+  align-items:center;
+}
+.veh-input{
+  height:40px;
+  padding: 0 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--gris-600);
+  background: linear-gradient(180deg, var(--gris-900), var(--gris-800));
+  color: var(--text);
+}
+.veh-input:focus{
+  border-color: var(--rojo);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--rojo) 38%, transparent);
+}
+.btn-icon{
+  height:40px; min-width:40px;
+  display:grid; place-items:center;
+  border-radius: 10px;
+  border:1px solid var(--gris-600);
+  background: var(--gris-700);
+  color:#fff; cursor:pointer;
+}
+.btn-icon:hover{ filter: brightness(1.06); }
+
+/* Footer del modal */
+.modal-footer{
+  display:flex; gap:10px; justify-content:flex-end;
+  padding: 12px 14px;
+  border-top:1px solid var(--gris-600);
+  background: linear-gradient(180deg, var(--gris-800), var(--gris-700));
+  border-bottom-left-radius: inherit;
+  border-bottom-right-radius: inherit;
+}
+.btn-primary,
+.btn-secondary,
+.btn-ghost{
+  height:40px;
+  padding: 0 14px;
+  border-radius: var(--radius-sm);
+  border:1px solid transparent;
+  cursor:pointer;
+  color:#fff;
+}
+.btn-primary{
+  background: linear-gradient(180deg, var(--azul), var(--azul-600));
+  border-color: #0f4fa1;
+}
+.btn-primary:hover{ filter: brightness(1.05); }
+.btn-secondary{
+  background: var(--gris-700);
+  border-color: var(--gris-600);
+}
+.btn-secondary:hover{ filter: brightness(1.05); }
+.btn-ghost{
+  background: transparent;
+  color: var(--gris-100);
+  border-color: var(--gris-600);
+}
+.btn-ghost:hover{ background: rgba(255,255,255,.05); }
+
+/* Accesibilidad foco */
+a:focus { outline: none; }
+a:focus-visible,
+button:focus-visible,
+input:focus-visible{
+  outline: 2px solid var(--azul);
+  outline-offset: 2px;
+}
+
+/* Animaciones base */
+@keyframes cardEnter{
+  from{ opacity:0; transform: translateY(6px); }
+  to{ opacity:1; transform: none; }
+}
+@keyframes sFade{
+  from{ opacity:0; } to{ opacity:1; }
+}
+
+/* Fila vehículo: entrar/salir */
+.veh-row.entering{ animation: rowIn .18s ease-out; }
+@keyframes rowIn{
+  from{ opacity:0; transform: translateY(-6px); }
+  to{ opacity:1; transform: none; }
+}
+.veh-row.leaving{ animation: rowOut .16s ease-in forwards; }
+@keyframes rowOut{
+  to{ opacity:0; transform: translateY(-6px); }
+}
+
+/* Modal in/out */
+.modal.opening{ animation: modalIn .18s cubic-bezier(.2,.7,.2,1); }
+.modal.closing{ animation: modalOut .16s cubic-bezier(.2,.7,.2,1) forwards; }
+@keyframes modalIn{
+  from{ opacity:0; transform: translateY(8px) scale(.98); }
+  to{ opacity:1; transform: translateY(0) scale(1); }
+}
+@keyframes modalOut{
+  from{ opacity:1; transform: translateY(0) scale(1); }
+  to{ opacity:0; transform: translateY(8px) scale(.985); }
+}
+
+/* Tarjeta recién agregada */
+.cliente-card.just-added{
+  animation: cardPop .28s cubic-bezier(.2,.7,.2,1), cardGlow 1.2s ease-out;
+}
+@keyframes cardPop{
+  from{ opacity:0; transform: translateY(10px) scale(.98); }
+  to{ opacity:1; transform: none; }
+}
+@keyframes cardGlow{
+  0%{ box-shadow: 0 0 0 0 rgba(25,118,210,.0); }
+  25%{ box-shadow: 0 0 0 8px rgba(25,118,210,.18); }
+  100%{ box-shadow: 0 0 0 0 rgba(25,118,210,.0); }
+}
+
+/* Mini toast */
+.mini-toast{
+  position: fixed;
+  left: 50%;
+  bottom: 22px;
+  transform: translateX(-50%);
+  background: linear-gradient(180deg, var(--gris-800), var(--gris-700));
+  border: 1px solid var(--gris-600);
+  color: var(--text);
+  padding: 10px 14px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.45);
+  z-index: 120;
+  animation: toastIn 1.8s ease;
+}
+@keyframes toastIn{
+  0%{ opacity:0; transform: translate(-50%, 8px); }
+  12%{ opacity:1; transform: translate(-50%, 0); }
+  80%{ opacity:1; }
+  100%{ opacity:0; transform: translate(-50%, 8px); }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce){
+  .cliente-card,
+  .cliente-card::before,
+  .cliente-card::after,
+  .mini-toast{
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* ===== Mobile modal (≤ 640px) ===== */
+@media (max-width: 640px){
+  .fab{
+    right: 16px;
+    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    width: 54px; height: 54px; font-size: 26px;
+    box-shadow: 0 10px 26px rgba(0,0,0,.45), inset 0 0 0 2px #0003;
+    z-index: 70;
+  }
+  dialog.modal[open]{
+    width: 100vw !important;
+    max-width: none !important;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    z-index: 1000;
+  }
+  dialog.modal::backdrop{
+    background: rgba(0,0,0,.55);
+    backdrop-filter: blur(2px);
+  }
+  .modal-header{
+    position: sticky; top: 0; z-index: 2;
+    padding: 10px 12px;
+    pointer-events: auto;
+  }
+  .modal-footer{
+    position: sticky; bottom: 0; z-index: 2;
+    padding: 10px 12px;
+    gap: 8px; flex-wrap: wrap; justify-content: flex-end;
+    pointer-events: auto;
+    background: linear-gradient(180deg, var(--gris-800), var(--gris-700));
+  }
+  .modal-body{
+    padding: 12px;
+    gap: 12px;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  label{ gap: 5px; font-size: .92rem; }
+  input[type="text"],
+  input[type="email"],
+  input[type="search"],
+  input[inputmode="tel"],
+  input:not([type]){
+    height: 40px; padding: 0 10px;
+  }
+  .grid-2{ grid-template-columns: 1fr !important; gap: 10px; }
+  .veh-row{
+    grid-template-columns: 1fr;
+    align-items: stretch;
+    gap: 8px;
+  }
+  .veh-input{ height: 38px; }
+  .btn-icon{
+    height: 40px; min-width: 40px; width: auto;
+    justify-self: end;
+  }
+  .modal-footer .btn-primary,
+  .modal-footer .btn-secondary,
+  .modal-footer .btn-ghost{
+    min-height: 40px;
+  }
+}
+
+/* Móviles muy pequeños (≤ 380px): botones full width */
+@media (max-width: 380px){
+  .modal-footer{ justify-content: stretch; }
+  .modal-footer .btn-primary,
+  .modal-footer .btn-secondary,
+  .modal-footer .btn-ghost{
+    flex: 1 1 100%;
+  }
+}
+
+/* Parchecitos “a prueba de CSS” */
+dialog:not([open]){ display: none !important; }
+.modal[open]{ display: flex !important; flex-direction: column !important; }
+.mini-toast{ z-index: 80 !important; }

@@ -27,7 +27,8 @@
 /* Vista: header y búsqueda */
 #view-clientes{
   display:block;
-  animation: fadeIn .18s ease;
+  /* ANTES: animation: fadeIn .18s ease;  (usaba transform) */
+  animation: sFade .18s ease;  /* solo opacidad, no afecta a la FAB fija */
 }
 .clientes-header{
   display:flex;
@@ -89,7 +90,6 @@
   flex-direction:column;
   gap: 10px;
   transform: translateZ(0);
-  /* Transiciones más suaves */
   transition:
     transform .42s cubic-bezier(.22,.61,.36,1),
     box-shadow .42s cubic-bezier(.22,.61,.36,1),
@@ -98,15 +98,11 @@
   animation: cardEnter .22s cubic-bezier(.2,.7,.2,1);
   isolation: isolate;
   cursor: pointer;
-  z-index: 0; /* stacking context propio */
+  z-index: 0;
 }
-/* Mantener contenido por encima del aura */
-.cliente-card > *{
-  position: relative;
-  z-index: 1;
-}
+.cliente-card > *{ position: relative; z-index: 1; }
 
-/* AURA azul/roja (visible y suave) */
+/* AURA azul/roja */
 .cliente-card::before{
   content:"";
   position:absolute; inset:-1px;
@@ -120,12 +116,10 @@
     color-mix(in oklab, var(--azul) 70%, transparent)
   );
   filter: blur(14px) saturate(120%);
-  opacity: .06;                 /* empieza muy sutil */
+  opacity: .06;
   pointer-events:none;
-  z-index: 0;                   /* ya NO -1 */
-  transition:
-    opacity .55s cubic-bezier(.22,.61,.36,1),
-    filter .55s ease;
+  z-index: 0;
+  transition: opacity .55s cubic-bezier(.22,.61,.36,1), filter .55s ease;
 }
 
 /* Destello oblicuo */
@@ -139,18 +133,17 @@
   opacity: 0;
   pointer-events:none;
   z-index: 0;
-  transition:
-    opacity .55s cubic-bezier(.22,.61,.36,1),
-    transform .55s cubic-bezier(.22,.61,.36,1);
+  transition: opacity .55s cubic-bezier(.22,.61,.36,1),
+              transform .55s cubic-bezier(.22,.61,.36,1);
 }
 
-/* Hover suave: elevación + aparición gradual */
+/* Hover */
 .cliente-card:hover{
   transform: translateY(-4px);
   box-shadow: 0 16px 40px rgba(0,0,0,.45);
   border-color: color-mix(in oklab, var(--azul) 35%, var(--gris-600));
 }
-.cliente-card:hover::before{ opacity: .6; } /* brillo conic más visible */
+.cliente-card:hover::before{ opacity: .6; }
 .cliente-card:hover::after{  opacity: 1; transform: rotate(-18deg) translateX(12%); }
 .cliente-card:active{ transform: translateY(-1px) scale(.998); }
 
@@ -162,11 +155,7 @@
   letter-spacing: .2px;
   text-shadow: 0 1px 0 #0008;
 }
-.cliente-meta{
-  margin:0;
-  color: var(--muted);
-  font-size: .95rem;
-}
+.cliente-meta{ margin:0; color: var(--muted); font-size: .95rem; }
 .cliente-vehiculos{
   margin-top: 6px;
   padding-top: 8px;
@@ -252,10 +241,7 @@
 }
 
 /* Form */
-label{
-  display:grid; gap:6px;
-  font-size:.95rem;
-}
+label{ display:grid; gap:6px; font-size:.95rem; }
 input[type="text"],
 input[type="email"],
 input[type="search"],
@@ -370,9 +356,7 @@ input:focus-visible{
   from{ opacity:0; transform: translateY(6px); }
   to{ opacity:1; transform: none; }
 }
-@keyframes sFade{
-  from{ opacity:0; } to{ opacity:1; }
-}
+@keyframes sFade{ from{ opacity:0; } to{ opacity:1; } }
 
 /* Fila vehículo: entrar/salir */
 .veh-row.entering{ animation: rowIn .18s ease-out; }
@@ -381,9 +365,7 @@ input:focus-visible{
   to{ opacity:1; transform: none; }
 }
 .veh-row.leaving{ animation: rowOut .16s ease-in forwards; }
-@keyframes rowOut{
-  to{ opacity:0; transform: translateY(-6px); }
-}
+@keyframes rowOut{ to{ opacity:0; transform: translateY(-6px); } }
 
 /* Modal in/out */
 .modal.opening{ animation: modalIn .18s cubic-bezier(.2,.7,.2,1); }
@@ -512,7 +494,7 @@ input:focus-visible{
   }
 }
 
-/* Móviles muy pequeños (≤ 380px): botones full width */
+/* Móviles muy pequeños (≤ 380px) */
 @media (max-width: 380px){
   .modal-footer{ justify-content: stretch; }
   .modal-footer .btn-primary,
@@ -522,7 +504,7 @@ input:focus-visible{
   }
 }
 
-/* Parchecitos “a prueba de CSS” */
+/* Parchecitos */
 dialog:not([open]){ display: none !important; }
 .modal[open]{ display: flex !important; flex-direction: column !important; }
 .mini-toast{ z-index: 80 !important; }
